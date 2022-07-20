@@ -36,7 +36,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       .catch(error => {
         const { code } = error;
 
-        if (code === 'auth/user-not-found' || code === 'auto/wrong-password') {
+        if (code === 'auth/user-not-found' || code === 'auth/wrong-password') {
           return Alert.alert('Login', 'E-mail e/ou senha invalida');
         } else {
           return Alert.alert('Login', 'Nao foi possivel realizar o login');

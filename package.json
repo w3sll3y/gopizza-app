@@ -3,10 +3,21 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start --dev-client",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web"
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "codepush:ios": "appcenter codepush release-react -a Quarks/casa-video-ios -d Production -m",
+    "codepush:android": "appcenter codepush release-react -a Quarks/casa-video-android -d Production -m",
+    "build:codepush": "yarn codepush:ios && yarn codepush:android",
+    "clean": "rm -rf node_modules yarn.lock && cd ios && rm -rf Pods Podfile.lock && cd ../android/app && rm -rf build && cd .. && rm -rf .gradle && cd .. && yarn && cd ios && pod install",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "pod": "npx pod-install",
+    "ios:beta": "yarn test && bundle exec fastlane ios beta",
+    "ios:release": "yarn test && bundle exec fastlane ios release",
+    "android:beta": "yarn test && bundle exec fastlane android beta",
+    "android:release": "yarn test && bundle exec fastlane android release",
+    "android:apk": "yarn test && bundle exec fastlane android apk"
   },
   "dependencies": {
     "@expo-google-fonts/dm-sans": "^0.2.2",

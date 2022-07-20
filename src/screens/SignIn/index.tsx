@@ -19,8 +19,8 @@ import {
 import { Button } from "../../../src/components/Button";
 
 export function SignIn() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const { signIn, isLogging } = useAuth();
 

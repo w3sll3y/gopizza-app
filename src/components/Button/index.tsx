@@ -6,13 +6,13 @@ import { Container, Title, Load, TypeProps } from "./style";
 type Props = RectButtonProps & {
   title: string,
   type?: TypeProps;
-  isLoadging?: boolean;
+  isLoading?: boolean;
 };
 
-export function Button({ title, type = 'primary', isLoadging = false, ...rest }: Props) {
+export function Button({ title, type = 'primary', isLoading = false, ...rest }: Props) {
   return (
-    <Container type={type} enabled={!isLoadging} {...rest}>
-      {isLoadging ? <Load /> : <Title> {title} </Title>}
+    <Container type={type} enabled={!isLoading} {...rest}>
+      {isLoading ? <Load /> : <Title> {title} </Title>}
     </Container>
   )
 }

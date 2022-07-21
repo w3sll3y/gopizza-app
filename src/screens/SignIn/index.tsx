@@ -22,11 +22,16 @@ export function SignIn() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const { signIn, isLogging } = useAuth();
+  const { signIn, isLogging, forgotPassword } = useAuth();
 
   function handleSignIn() {
     signIn(email, password);
   }
+
+  function handleForgotPassword() {
+    forgotPassword(email);
+  }
+
   return (
     <Container>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -47,7 +52,7 @@ export function SignIn() {
             secureTextEntry
             onChangeText={setPassword}
           />
-          <ForgotPasswordButton>
+          <ForgotPasswordButton onPress={handleForgotPassword}>
             <ForgotPasswordLabel> Esqueci minha senha </ForgotPasswordLabel>
           </ForgotPasswordButton>
           <Button

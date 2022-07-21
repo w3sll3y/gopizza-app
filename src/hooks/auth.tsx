@@ -2,11 +2,13 @@ import React, {
   createContext,
   useContext,
   useState,
-  ReactNode
+  ReactNode,
+  useEffect
 } from "react";
 import { Alert } from "react-native";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type User = {
   id: string,
@@ -23,6 +25,8 @@ type AuthContextData = {
 type AuthProviderProps = {
   children: ReactNode;
 }
+
+const USER_COLLECTION = '@gopizza:users';
 
 export const AuthContext = createContext({} as AuthContextData);
 
@@ -43,7 +47,7 @@ function AuthProvider({ children }: AuthProviderProps) {
           .collection('users')
           .doc(account.user.uid)
           .get()
-          .then(profile => {
+          .then(async (profile) => {
             const { name, isAdmin } = profile.data() as User;
 
             if (profile.exists) {
@@ -53,10 +57,11 @@ function AuthProvider({ children }: AuthProviderProps) {
                 isAdmin
               };
 
-              console.log(userData);
-              setUser(userData)
+              await AsyncStorage.setItem(USER_COLLECTION, JSON.stringify(userData));
+              setUser(userData);
             }
           })
+          .catch(() => Alert.alert('Login', 'Nao foi possivel buscar os dados de perfil do usuario'));
       })
       .catch(error => {
         const { code } = error;
@@ -70,10 +75,28 @@ function AuthProvider({ children }: AuthProviderProps) {
       .finally(() => setIsLogging(false));
   }
 
+  async function loadUserStorageData() {
+    setIsLogging(true);
+
+    const storedUser = await AsyncStorage.getItem(USER_COLLECTION);
+
+    if (storedUser) {
+      const userData = JSON.parse(storedUser) as User;
+      setUser(userData);
+    }
+
+    setIsLogging(false);
+  }
+
+  useEffect(() => {
+    loadUserStorageData();
+  }, []);
+
   return (
     <AuthContext.Provider value={{
       signIn,
-      isLogging
+      isLogging,
+      user
     }}>
       {children}
     </AuthContext.Provider>
